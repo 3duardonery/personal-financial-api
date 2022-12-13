@@ -1,11 +1,19 @@
-import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Inject, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
 import { LocalAuthGuard } from 'src/auth/local-auth-guard';
 import { AuthService } from 'src/auth/services/auth.service';
+import {
+  IUserRepository,
+  USER_REPOSITORY,
+} from './users/repository/user.interface';
 
 @Controller()
 export class AppController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    @Inject(USER_REPOSITORY)
+    private _userRepository: IUserRepository,
+    private authService: AuthService,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
@@ -17,5 +25,10 @@ export class AppController {
   @Get('profile')
   getProfile(@Req() req) {
     return req.user;
+  }
+
+  @Get('api/get')
+  getByRepo(@Req() req) {
+    return this._userRepository.greet('Eduardo');
   }
 }
