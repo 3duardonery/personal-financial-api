@@ -17,10 +17,6 @@ export class UserRepository implements IUserRepository {
     },
   ];
 
-  public async greet(name: string): Promise<string> {
-    return `Hey, how's it goin' ${name}?`;
-  }
-
   async findUserByUsername(username: string): Promise<User> {
     return await this.users.find((user) => user.username === username);
   }
