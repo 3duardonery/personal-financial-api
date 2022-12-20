@@ -4,4 +4,5 @@ export const USER_REPOSITORY = 'USER INTERFACE REPOSITORY';
 
 export interface IUserRepository {
   findUserByUsername(username: string): Promise<User>;
+  create(user: User): Promise<User>;
 }
