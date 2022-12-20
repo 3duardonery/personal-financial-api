@@ -1,4 +1,4 @@
-import { User } from '../model/user.model';
+import { User } from '../schemas/user.schema';
 
 export const USER_REPOSITORY = 'USER INTERFACE REPOSITORY';
 

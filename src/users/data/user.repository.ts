@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../model/user.model';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { IUserRepository } from '../repository/user.interface';
+import { User, UserDocument } from '../schemas/user.schema';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -17,7 +19,12 @@ export class UserRepository implements IUserRepository {
     },
   ];
 
+  constructor(
+    @InjectModel(User.name)
+    private readonly _userRepository: Model<UserDocument>,
+  ) {}
+
   async findUserByUsername(username: string): Promise<User> {
-    return await this.users.find((user) => user.username === username);
+    return await this._userRepository.findOne({ username: username }).exec();
   }
 }
