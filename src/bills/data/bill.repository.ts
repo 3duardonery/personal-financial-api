@@ -10,6 +10,29 @@ export class BillRepository implements IBillRepository {
     @InjectModel(Bill.name)
     private readonly _userRepository: Model<BillDocument>,
   ) {}
+  async list(filter: any, pageSize: number, currentPage: number): Promise<any> {
+    const bills = await this._userRepository
+      .find(filter)
+      .limit(pageSize)
+      .skip(pageSize * currentPage)
+      .sort({
+        createdAt: -1,
+      })
+      .exec();
+
+    const length = await this._userRepository.find(filter).exec();
+
+    console.log(currentPage);
+
+    return {
+      length: length.length,
+      data: bills,
+      pagination: {
+        current: Number(currentPage),
+        pages: Math.ceil(length.length / pageSize),
+      },
+    };
+  }
 
   async create(user: Bill): Promise<Bill> {
     return await new this._userRepository({
